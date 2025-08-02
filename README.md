@@ -1,4 +1,4 @@
-# TailAdmin React - Free React Tailwind Admin Dashboard Template
+<!-- # TailAdmin React - Free React Tailwind Admin Dashboard Template
 
 TailAdmin is a free and open-source admin dashboard template built on **React and Tailwind CSS**, providing developers
 with everything they need to create a comprehensive, data-driven back-end,
@@ -189,4 +189,4 @@ TailAdmin React.js Free Version is released under the MIT License.
 ## Support
 
 If you find this project helpful, please consider giving it a star on GitHub. Your support helps us continue developing
-and maintaining this template.
+and maintaining this template. -->
