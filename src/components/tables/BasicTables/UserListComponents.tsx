@@ -137,9 +137,6 @@ export default function UserList() {
                 No. Handphone
               </TableCell>
               <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 dark:text-gray-400 font-medium">
-                Position
-              </TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 dark:text-gray-400 font-medium">
                 Role
               </TableCell>
               <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 dark:text-gray-400 font-medium">

@@ -8,22 +8,29 @@ import DatePicker from "../date-picker.tsx";
 import { register } from "../../../services/auth.tsx";
 import { useNavigate } from "react-router";
 import Button from "../../ui/button/Button.tsx";
-const products = [
-  { id: '8aee1d2d-94df-41cb-a72e-2190bd0f7c9f', name: 'Besi Hollow 4x4' },
-  { id: '78be5e1e-519a-4427-84f1-8b3c5e19d2ad', name: 'Cat Tembok Putih' },
-  { id: '4a97b5ce-399e-4d7a-98b5-3a5f54845a17', name: 'Semen 50kg' },
-];
 
+// Define the Item type
 type Item = {
   productId: string;
   name: string;
   qty: number;
 };
 
-export default function CreatePengeluaranComponents() {
+type Product = {
+  id: string;
+  name: string;
+};
+
+const products: Product[] = [
+  { id: "1", name: "Produk A" },
+  { id: "2", name: "Produk B" },
+  { id: "3", name: "Produk C" },
+];
+
+export default function CreatePengeluaranAGComponents() {
   const [nama, setNama] = useState("");
 
- const [items, setItems] = useState<Item[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
    const [showModal, setShowModal] = useState(false);
    const [selectedProductId, setSelectedProductId] = useState('');
    const [qty, setQty] = useState('');
@@ -62,7 +69,7 @@ export default function CreatePengeluaranComponents() {
   };
 
   return (
-    <ComponentCard title="create Pengeluaran">
+    <ComponentCard title="Pengeluaran AG">
       <div className="space-y-6">
         <form onSubmit={handleSubmit}>
             <div>
@@ -79,10 +86,6 @@ export default function CreatePengeluaranComponents() {
               onChange={(e) => setNama(e.target.value)} />
           </div>
 
-          <div>
-            <label htmlFor="input">Penerima</label>
-            <input type="text" id="name" placeholder="masukan nama penerima" className="w-full border px-3 py-2 rounded mb-4" />
-          </div>
            <button
         className="bg-blue-600 text-white px-4 py-2 rounded mb-4"
         onClick={() => setShowModal(true)}
