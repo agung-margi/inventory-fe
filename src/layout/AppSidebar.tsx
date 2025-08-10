@@ -19,11 +19,13 @@ import {
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
+import { useAuth } from "../context/AuthContext";
 
 type NavItem = {
   name: string;
   icon: React.ReactNode;
   path?: string;
+  roles?: string[]; // Optional roles for access control
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
 };
 
@@ -32,10 +34,12 @@ const navItems: NavItem[] = [
     icon: <GridIcon />,
     name: "Dashboard",
     path: "/",
+    roles: ["admin", "manager", "user"],
   },
   {
     icon: <UserCircleIcon />,
     name: "User",
+    roles: ["admin"],
     subItems: [
       { name: "Create User", path: "/users/create", pro: false },
     { name: "List User", path: "/users", pro: false }],
@@ -43,6 +47,7 @@ const navItems: NavItem[] = [
   {
     icon: <FolderIcon />,
     name: "Warehosue",
+    roles: ["admin", "manager"],
     subItems: [
       { name: "Create Warehouse", path: "/warehouses/create", pro: false },
     { name: "List Warehouse", path: "/warehouses", pro: false }],
@@ -75,6 +80,8 @@ const navItems: NavItem[] = [
 
 
 const AppSidebar: React.FC = () => {
+   const auth = useAuth();
+   const user = auth?.user;
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
 
@@ -144,7 +151,9 @@ const AppSidebar: React.FC = () => {
 
   const renderMenuItems = (items: NavItem[], menuType: "main" | "others") => (
     <ul className="flex flex-col gap-4">
-      {items.map((nav, index) => (
+      {items
+        .filter(nav => !nav.roles || (user && nav.roles.includes(user.role)))
+        .map((nav, index) => (
         <li key={nav.name}>
           {nav.subItems ? (
             <button

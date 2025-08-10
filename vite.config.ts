@@ -4,6 +4,16 @@ import svgr from "vite-plugin-svgr";
 
 // https://vite.dev/config/
 export default defineConfig({
+   server: {
+    proxy: {
+      '/api': {
+        target: 'http://10.97.25.2:3300',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '/api'),
+      },
+    },
+  },
   plugins: [
     react(),
     svgr({

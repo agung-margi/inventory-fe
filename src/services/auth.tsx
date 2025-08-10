@@ -1,7 +1,7 @@
 // buaktan service: src/services/auth.ts
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3300/api/v1/auth';
+const API_URL = '/api/v1/auth';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -28,3 +28,8 @@ export const getcsrfToken = async() => {
     const res = await api.get('/csrf-token');
     axios.defaults.headers.common["X-CSRF-Token"] = res.data.csrfToken;
 }
+
+export const getMe = async () => {
+  const res = await api.get("/auth/me");
+  return res.data; // { id, email, role, ... }
+};

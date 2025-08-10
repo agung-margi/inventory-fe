@@ -10,21 +10,31 @@ export default function SignInForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+ const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Ensure CSRF token is fetched before login/registerfetchCsrfToken
-
     if (!email || !password) {
-      alert("Email and password are required");
+      setErrorMsg("Email and password are required");
       return;
     }
-     await login(email, password);
-      console.log("Login berhasil, redirect ke /products");
+
+    try {
+      await login(email, password);
+      console.log("Login berhasil, redirect ke /");
       navigate("/");
+    } catch (err: any) {
+      // Tangkap pesan dari backend
+      if (err.response && err.response.data && err.response.data.message) {
+        setErrorMsg(err.response.data.message);
+      } else {
+        setErrorMsg("Login gagal. Silakan coba lagi.");
+      }
+    }
   };
+
   return (
     <div className="flex flex-col flex-1">
       <div className="w-full max-w-md pt-10 mx-auto">
@@ -77,6 +87,9 @@ export default function SignInForm() {
                     </span>
                   </div>
                 </div>
+                {errorMsg && (
+                <div className="text-red-500 text-sm">{errorMsg}</div>
+              )}
                  <div className="pt-2">
                   <Button className="w-full" size="sm" type="submit">
                     Sign in
