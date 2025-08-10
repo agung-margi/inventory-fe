@@ -25,6 +25,8 @@ import CreateItemPage from "./pages/Item/CreateItemPage";
 import UserList from "./components/tables/BasicTables/UserListComponents";
 import UserPage from "./pages/User/UserPage";
 import CreateUserPage from "./pages/User/CreateUserPage";
+import CreatePengeluaranPage from "./pages/Transaksi/pengeluaran";
+import CreatePengeluaranAGPage from "./pages/Transaksi/pengeluaranAG";
 
 export default function App() {
   return (
@@ -59,6 +61,12 @@ export default function App() {
             {/* items */}
             <Route path="/items" element={<ItemPage />} />
             <Route path="/items/create" element={<CreateItemPage />} />
+
+
+            {/* transaksi */}
+            <Route path="/pengeluaran" element={<CreatePengeluaranPage />} />
+            <Route path="/pengeluaranAG" element={<CreatePengeluaranAGPage />} /> 
+            
 
             {/* Ui Elements */}
             <Route path="/alerts" element={<Alerts />} />

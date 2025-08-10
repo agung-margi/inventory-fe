@@ -7,51 +7,53 @@ import {
   TableRow,
 } from "../../ui/table";
 import Button from "../../ui/button/Button";
-import { PencilIcon } from "../../../icons";
+import { EyeIcon } from "../../../icons";
 
-interface Warehouse {
+interface StockItem {
   id: number;
-  code: string; // Kode WH
-  name: string; // Nama WH
-  address: string; // Alamat
+  code: string; // kode WH
+  warehouseName: string;
+  items: {
+    name: string;
+    stock: number;
+  }[];
 }
 
-const tableData: Warehouse[] = [
+const tableData: StockItem[] = [
   {
     id: 1,
     code: "WH001",
-    name: "WH SUKARESMI",
-    address: "Jl. Raya Sukaresmi No.12, Bandung",
+    warehouseName: "WH SUKARESMI",
+    items: [
+      { name: "Semen Portland", stock: 120 },
+      { name: "Besi Beton", stock: 80 },
+      { name: "Batu Bata", stock: 5000 },
+    ],
   },
   {
     id: 2,
     code: "WH002",
-    name: "WH CIKARANG",
-    address: "Jl. Industri No.88, Cikarang",
+    warehouseName: "WH CIKARANG",
+    items: [
+      { name: "Pipa PVC", stock: 300 },
+      { name: "Keramik Lantai", stock: 200 },
+    ],
   },
   {
     id: 3,
     code: "WH003",
-    name: "WH JAKARTA",
-    address: "Jl. Sudirman No.15, Jakarta",
-  },
-  {
-    id: 4,
-    code: "WH004",
-    name: "WH SURABAYA",
-    address: "Jl. Ahmad Yani No.101, Surabaya",
-  },
-  {
-    id: 5,
-    code: "WH005",
-    name: "WH DENPASAR",
-    address: "Jl. Gatot Subroto No.45, Denpasar",
+    warehouseName: "WH JAKARTA",
+    items: [
+      { name: "Cat Tembok", stock: 150 },
+      { name: "Kayu Lapis", stock: 90 },
+      { name: "Triplek", stock: 70 },
+    ],
   },
 ];
 
-export default function WarehouseListComponents() {
+export default function DisplayStockComponents() {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 2;
 
   const totalPages = Math.ceil(tableData.length / itemsPerPage);
   const paginatedData = tableData.slice(
@@ -65,16 +67,19 @@ export default function WarehouseListComponents() {
         <Table>
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
-              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 dark:text-gray-400 font-medium">
+              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 font-medium">
                 Kode WH
               </TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 dark:text-gray-400 font-medium">
+              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 font-medium">
                 Nama WH
               </TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 dark:text-gray-400 font-medium">
-                Alamat
+              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 font-medium">
+                List Item
               </TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 dark:text-gray-400 font-medium">
+              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 font-medium">
+                Stock
+              </TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 font-medium">
                 Action
               </TableCell>
             </TableRow>
@@ -84,28 +89,41 @@ export default function WarehouseListComponents() {
             {paginatedData.map((wh) => (
               <TableRow key={wh.id}>
                 {/* Kode WH */}
-                <TableCell className="px-5 py-4 text-start font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                <TableCell className="px-5 py-4 font-medium text-gray-800 text-theme-sm dark:text-white/90">
                   {wh.code}
                 </TableCell>
 
                 {/* Nama WH */}
-                <TableCell className="px-4 py-3 text-start text-gray-500 text-theme-sm dark:text-gray-400">
-                  {wh.name}
+                <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                  {wh.warehouseName}
                 </TableCell>
 
-                {/* Alamat */}
-                <TableCell className="px-4 py-3 text-start text-gray-500 text-theme-sm dark:text-gray-400">
-                  {wh.address}
+                {/* List Item */}
+                <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                  <ul className="list-disc pl-4">
+                    {wh.items.map((item, i) => (
+                      <li key={i}>{item.name}</li>
+                    ))}
+                  </ul>
+                </TableCell>
+
+                {/* Stock */}
+                <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                  <ul className="list-none">
+                    {wh.items.map((item, i) => (
+                      <li key={i}>{item.stock}</li>
+                    ))}
+                  </ul>
                 </TableCell>
 
                 {/* Action */}
-                <TableCell className="px-4 py-3 text-start">
+                <TableCell className="px-4 py-3">
                   <Button
                     size="sm"
                     variant="success"
-                    startIcon={<PencilIcon className="size-4" />}
+                    startIcon={<EyeIcon className="size-4" />}
                   >
-                    View
+                    Detail
                   </Button>
                 </TableCell>
               </TableRow>
@@ -114,7 +132,7 @@ export default function WarehouseListComponents() {
         </Table>
       </div>
 
-      {/* Pagination Controls */}
+      {/* Pagination */}
       <div className="flex items-center justify-between p-4">
         <span className="text-sm text-gray-500 dark:text-gray-400">
           Page {currentPage} of {totalPages}

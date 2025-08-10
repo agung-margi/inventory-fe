@@ -64,11 +64,11 @@ const navItems: NavItem[] = [
     name: "Transaksi",
     icon: <PageIcon />,
     subItems: [
-      { name: "Permintaan", path: "/penerimaan", pro: false },
+      { name: "Permintaan", path: "/permintaan", pro: false },
       { name: "Penerimaan", path: "/penerimaan", pro: false },
       { name: "Pengeluaran", path: "/pengeluaran", pro: false },
-      { name: "Pengeluaran AG", path: "/pengeluaran", pro: false },
-      { name: "Penerimaan AG", path: "/pengeluaran", pro: false },
+      { name: "Pengeluaran AG", path: "/pengeluaranAG", pro: false },
+      { name: "Penerimaan AG", path: "/penerimaan AG", pro: false },
     ],
   },
   {

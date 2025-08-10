@@ -10,15 +10,16 @@ import Button from "../../ui/button/Button.tsx";
 
 export default function CreateItemComponents() {
   const [showPassword, setShowPassword] = useState(false);
-
+  const [designator, setDsignator] = useState("");
+  const [nama_item, setNama_item] = useState("");
+  const [kategori, setKategori] = useState("");
   const options = [
     { value: "clamp-hook", label: "CLAMP-HOOK" },
     { value: "ku", label: "Kabel Udara" },
     { value: "tiang", label: "Tiang" },
   ];
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  
   const navigate = useNavigate();
 
   const handleSelectChange = (value: string) => {
@@ -30,13 +31,10 @@ export default function CreateItemComponents() {
 
     // Ensure CSRF token is fetched before login/registerfetchCsrfToken
 
-    if (!email || !password) {
-      alert("Email and password are required");
-      return;
-    }
+  
 
-    await register(email, password);
-    navigate("/products");
+    //await register(email, password);
+    navigate("/items");
   };
 
   return (
@@ -60,10 +58,7 @@ export default function CreateItemComponents() {
               className="dark:bg-dark-900"
             />
           </div>
-          <div>
-            <Label htmlFor="input">Harga</Label>
-            <Input type="text" id="name" placeholder="Masukan Harga" />
-          </div>
+          
           <div className="flex justify-end mt-4 space-x-2">
             <Button type="submit" variant="success">
               Submit

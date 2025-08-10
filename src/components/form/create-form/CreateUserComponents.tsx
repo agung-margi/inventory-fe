@@ -11,9 +11,12 @@ import Button from "../../ui/button/Button.tsx";
 
 export default function CreateUserComponents() {
   const [showPassword, setShowPassword] = useState(false);
+  const [nama, setNama] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
+  const [role, setRole] = useState("");
+  const [kode_wh, setKode_wh] = useState("");
   const navigate = useNavigate();
 
   const roles = [
@@ -35,7 +38,7 @@ export default function CreateUserComponents() {
     }
 
     await register(email, password);
-    navigate("/products");
+    navigate("/users");
   };
 
   return (
