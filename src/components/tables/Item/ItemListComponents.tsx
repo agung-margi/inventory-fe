@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "../../ui/table";
-import Badge from "../../ui/badge/Badge";
 import Button from "../../ui/button/Button";
 import { PencilIcon } from "../../../icons";
 
@@ -28,10 +27,9 @@ export default function ItemListComponents() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Pagination state
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
-  const totalPages = Math.ceil(items.length / itemsPerPage);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     async function fetchItems() {
@@ -39,7 +37,8 @@ export default function ItemListComponents() {
       setError(null);
       try {
         const response = await getAllItem();
-        setItems(response.data); // data dari API
+        setItems(response.data);
+        setTotalPages(response.meta.totalPage || 1); // data dari API
       } catch (err) {
         setError("Gagal mengambil data");
       } finally {
@@ -49,13 +48,10 @@ export default function ItemListComponents() {
     fetchItems();
   }, []);
 
-  const paginatedData = items.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
 
   if (loading) return <p>Loading data...</p>;
   if (error) return <p>{error}</p>;
+  if (!items.length) return <p>Data item kosong</p>;
 
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
@@ -88,7 +84,7 @@ export default function ItemListComponents() {
           </TableHeader>
 
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-            {paginatedData.map((item) => (
+            {items.map((item) => (
               <TableRow key={item.id}>
                 <TableCell className="px-5 py-4 text-start">{item.designator}</TableCell>
                 <TableCell className="px-5 py-4 text-start">{item.nama_item}</TableCell>
@@ -116,21 +112,31 @@ export default function ItemListComponents() {
         <span className="text-sm text-gray-500 dark:text-gray-400">
           Page {currentPage} of {totalPages}
         </span>
-        <div className="space-x-2">
+        <div className="space-x-2 flex items-center">
           <Button
             size="sm"
             variant="outline"
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
             disabled={currentPage === 1}
           >
             Prev
           </Button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <Button
+              key={page}
+              size="sm"
+              variant={page === currentPage ? "success" : "outline"}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </Button>
+          ))}
+
           <Button
             size="sm"
             variant="outline"
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
             disabled={currentPage === totalPages}
           >
             Next

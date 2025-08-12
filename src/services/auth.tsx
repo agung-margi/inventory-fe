@@ -1,24 +1,24 @@
 // buaktan service: src/services/auth.ts
 import axios from 'axios';
 
-const API_URL = '/api/v1/auth';
+const API_URL = 'api/v1/auth';
 
 const api = axios.create({
   baseURL: API_URL,
   withCredentials: true,// penting agar cookie dikirim dan diterima
 });
 
-
+export const register = async (email: string, password: string, confirm_password:string) => {
+  const response = await api.post(`/register`, { email, password, confirm_password });
+  return response.data;
+};
 
 export const login = async (email: string, password: string) => {
   const response = await api.post(`/login`, { email, password });
   return response.data;
 };
 
-export const register = async (email: string, password: string) => {
-  const response = await api.post(`/register`, { email, password });
-  return response.data;
-};
+
 export const logout = async () => {
   const response = await api.post(`/logout`);
   return response.data;
@@ -30,6 +30,15 @@ export const getcsrfToken = async() => {
 }
 
 export const getMe = async () => {
-  const res = await api.get("/auth/me");
+  const res = await api.get("/me");
   return res.data; // { id, email, role, ... }
 };
+
+
+export const getAllUser = async (page = 1, limit = 20) => {
+  const res = await api.get('/user', {
+    params: { page, limit }
+  });
+
+  return res.data;
+}

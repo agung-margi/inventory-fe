@@ -39,7 +39,7 @@ const navItems: NavItem[] = [
   {
     icon: <UserCircleIcon />,
     name: "User",
-    roles: ["admin"],
+    // roles: ["admin"],
     subItems: [
       { name: "Create User", path: "/users/create", pro: false },
     { name: "List User", path: "/users", pro: false }],
@@ -47,10 +47,10 @@ const navItems: NavItem[] = [
   {
     icon: <FolderIcon />,
     name: "Warehosue",
-    roles: ["admin", "manager"],
+    // roles: ["admin", "manager"],
     subItems: [
-      { name: "Create Warehouse", path: "/warehouses/create", pro: false },
-    { name: "List Warehouse", path: "/warehouses", pro: false }],
+      { name: "Create Warehouse", path: "/warehouse/create", pro: false },
+    { name: "List Warehouse", path: "/warehouse", pro: false }],
   },
   {
     name: "Item",

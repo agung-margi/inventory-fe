@@ -2,7 +2,7 @@ import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import ComponentCard from "../../components/common/ComponentCard";
 import PageMeta from "../../components/common/PageMeta";
 import BasicTableOne from "../../components/tables/BasicTables/BasicTableOne";
-import UserList from "../../components/tables/BasicTables/UserListComponents";
+import UserList from "../../components/tables/User/UserListComponents";
 
 
 export default function UserPage() {

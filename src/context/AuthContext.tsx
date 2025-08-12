@@ -1,6 +1,7 @@
 // AuthContext.tsx (contoh)
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface AuthContextType {
   user: any; // Replace 'any' with your user type if available
@@ -11,6 +12,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+
+  const navigate = useNavigate();
   const [user, setUser] = useState<any>(null); // Replace 'any' with your user type if available
   const [loading, setLoading] = useState(true);
 
@@ -19,8 +22,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const res = await axios.get("/api/v1/auth/me", { withCredentials: true });
         setUser(res.data.user);
-      } catch {
+      } catch (error: any) {
         setUser(null);
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          navigate("/signin");
+        }
       } finally {
         setLoading(false);
       }

@@ -1,7 +1,7 @@
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import ComponentCard from "../../components/common/ComponentCard";
 import PageMeta from "../../components/common/PageMeta";
-import ItemListComponents from "../../components/tables/BasicTables/ItemListComponents";
+import ItemListComponents from "../../components/tables/Item/ItemListComponents";
 
 
 export default function ItemPage() {

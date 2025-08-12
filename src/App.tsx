@@ -16,22 +16,22 @@ import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
-import CreateUserElements from "./pages/User/CreateUserPage";
-import WarehouseListComponents from "./components/tables/BasicTables/WarehouseListComponents";
 import WarehousePage from "./pages/Warehouse/WarehousePage";
 import ItemPage from "./pages/Item/ItemPage";
 import CreateWarehousePage from "./pages/Warehouse/CreateWarehousePage";
 import CreateItemPage from "./pages/Item/CreateItemPage";
-import UserList from "./components/tables/BasicTables/UserListComponents";
 import UserPage from "./pages/User/UserPage";
 import CreateUserPage from "./pages/User/CreateUserPage";
 import CreatePengeluaranPage from "./pages/Transaksi/pengeluaran";
 import CreatePengeluaranAGPage from "./pages/Transaksi/pengeluaranAG";
+import PermintaanPage from "./pages/Transaksi/permintaan";
+import ViewWarehouse from "./components/tables/Warehouse/ViewWarehouse";
+import FormPermintaanComponents from "./components/form/create-form/FormPermintaanComponents";
+import ApprovePermintaanForm from "./components/form/create-form/ViewPermintaanComponents";
 
 export default function App() {
   return (
     <>
-      <Router>
         <ScrollToTop />
         <Routes>
           {/* Dashboard Layout */}
@@ -55,8 +55,9 @@ export default function App() {
             <Route path="/users/create" element={<CreateUserPage />} />
 
             {/* warehouse */}
-            <Route path="/warehouses" element={<WarehousePage />} />
-            <Route path="/warehouses/create" element={<CreateWarehousePage />} />
+            <Route path="/warehouse" element={<WarehousePage />} />
+            <Route path="/warehouse/create" element={<CreateWarehousePage />} />
+            <Route path="/warehouse/view/:id" element={<ViewWarehouse />} />
 
             {/* items */}
             <Route path="/items" element={<ItemPage />} />
@@ -65,9 +66,11 @@ export default function App() {
 
             {/* transaksi */}
             <Route path="/pengeluaran" element={<CreatePengeluaranPage />} />
-            <Route path="/pengeluaranAG" element={<CreatePengeluaranAGPage />} /> 
-            
+            <Route path="/pengeluaranAG" element={<CreatePengeluaranAGPage />} />
+            <Route path="/permintaan" element={<PermintaanPage />} />
 
+            <Route path="/permintaan/create" element={<FormPermintaanComponents />} />
+            <Route path="/permintaan/view/:id" element={<ApprovePermintaanForm/>} />
             {/* Ui Elements */}
             <Route path="/alerts" element={<Alerts />} />
             <Route path="/avatars" element={<Avatars />} />
@@ -85,7 +88,6 @@ export default function App() {
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </Router>
     </>
   );
 }

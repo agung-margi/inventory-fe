@@ -1,6 +1,6 @@
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
-import CreatePengeluaranComponents from "../../components/form/create-form/Createpengeluarancomponents"
+import CreatePengeluaranComponents from "../../components/form/create-form/CreatePengeluarancomponents copy";
 
 export default function CreatePengeluaranPage() {
   return (
