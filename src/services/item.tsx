@@ -9,6 +9,15 @@ const api = axios.create({
 });
 
 
+export const createItem = async (data: {
+  designator: string;
+  nama_item: string;
+  kategori: string;
+  satuan: string;
+}) => {
+  const response = await api.post('/item', data);
+  return response.data;
+};
 export const getAllItem = async () => {
   const response = await api.get('/item');
   return response.data;

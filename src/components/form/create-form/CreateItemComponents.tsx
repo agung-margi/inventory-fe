@@ -7,15 +7,14 @@ import { EyeCloseIcon, EyeIcon, TimeIcon } from "../../../icons/index.ts";
 import { register } from "../../../services/auth.tsx";
 import { useNavigate } from "react-router";
 import Button from "../../ui/button/Button.tsx";
+import { createItem } from "../../../services/item.tsx";
+import { toast } from "react-toastify";
 
 export default function CreateItemComponents() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [designator, setDsignator] = useState("");
+  const [designator, setDesignator] = useState("");
   const [nama_item, setNama_item] = useState("");
   const [kategori, setKategori] = useState("");
-  const [satuan, setsatuan] = useState("");
-  const [created_at, setCreated_at] = useState("");
-  const [action, setAction] = useState("");
+  const [satuan, setSatuan] = useState("");
   const options = [
     { value: "clamp-hook", label: "CLAMP-HOOK" },
     { value: "ku", label: "Kabel Udara" },
@@ -33,12 +32,19 @@ export default function CreateItemComponents() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Ensure CSRF token is fetched before login/registerfetchCsrfToken
-
-  
-
-    //await register(email, password);
-    navigate("/items");
+   try {
+         // Kamu bisa kirim data lengkap ke API register
+         await createItem({
+           designator,
+           nama_item,
+           kategori,
+           satuan
+         });
+         toast.success("Registrasi berhasil");
+         navigate("/users");
+       } catch (error: any) {
+         toast.error(error.response?.data?.message || "Terjadi kesalahan");
+       }
   };
 
   return (
@@ -47,20 +53,25 @@ export default function CreateItemComponents() {
         <form onSubmit={handleSubmit}>
           <div>
             <Label htmlFor="input">Kode Barang</Label>
-            <Input type="text" id="name" placeholder="KODE-ITEM-1" />
+            <Input type="text" id="name" placeholder="KODE-ITEM-1"
+            value={designator}
+             onChange={(e) => setDesignator(e.target.value)} />
           </div>
           <div>
             <Label htmlFor="input">Nama Barang</Label>
-            <Input type="text" id="name" placeholder="Item 1" />
+            <Input type="text" id="name" placeholder="Item 1" 
+            value={nama_item}
+              onChange={(e) => setNama_item(e.target.value)}/>
           </div>
           <div>
             <Label>Jenis Barang</Label>
             <Select
               options={options}
               placeholder="Select Option"
-              onChange={handleSelectChange}
+              onChange={(value: string) => setKategori(value)}
               className="dark:bg-dark-900"
-            />
+              value={kategori}
+              />
           </div>
           <div>
   <Label htmlFor="satuan">Satuan</Label>
@@ -69,6 +80,7 @@ export default function CreateItemComponents() {
     name="satuan"
     className="border rounded p-2 w-full"
     defaultValue=""
+    onChange={(e) => setSatuan(e.target.value)}
   >
     <option value="" disabled>Pilih satuan</option>
     <option value="pcs">Pcs</option>

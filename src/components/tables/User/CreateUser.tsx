@@ -7,6 +7,7 @@ import Button from "../../ui/button/Button.tsx";
 import Label from "../../form/Label.tsx";
 import Input from "../../form/input/InputField.tsx";
 import Select from "../../form/Select.tsx";
+import { toast } from "react-toastify";
 
 type CreateUserFormData = {
   nama: string;
@@ -33,7 +34,8 @@ export default function CreateUserComponents({
 
   const roles = [
     { value: "admin", label: "Admin" },
-    { value: "superadmin", label: "Superadmin" },
+    { value: "user", label: "User" },
+    { value: "manager", label: "Manager" },
   ];
 
   const handleSelectChange = (value: string) => {
@@ -43,7 +45,7 @@ export default function CreateUserComponents({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !password || !nama || !confirmPassword || !role) {
+    if (!email || !password || !nama || !confirmPassword || !role || !phone) {
       alert("Mohon isi semua field yang wajib");
       return;
     }
@@ -55,11 +57,11 @@ export default function CreateUserComponents({
 
     try {
       // Kamu bisa kirim data lengkap ke API register
-      await register(email, password, confirmPassword);
-      alert("Registrasi berhasil");
+      await register(nama, email, phone, password, confirmPassword, role);
+      toast.success("Registrasi berhasil");
       navigate("/users");
-    } catch (error) {
-      alert("Gagal registrasi: " + (error as Error).message);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Terjadi kesalahan");
     }
   };
 
