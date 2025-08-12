@@ -17,7 +17,7 @@ interface Item {
   nama_item: string;
   kategori: string;
   satuan: string;
-  harga: number;
+  // harga: number;
   createdAt: string;
   // bisa tambah properti lain jika perlu
 }
@@ -71,9 +71,9 @@ export default function ItemListComponents() {
               <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 dark:text-gray-400 font-medium">
                 Satuan
               </TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 dark:text-gray-400 font-medium">
+              {/* <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 dark:text-gray-400 font-medium">
                 Harga
-              </TableCell>
+              </TableCell> */}
               <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 dark:text-gray-400 font-medium">
                 Created At
               </TableCell>
@@ -90,7 +90,7 @@ export default function ItemListComponents() {
                 <TableCell className="px-5 py-4 text-start">{item.nama_item}</TableCell>
                 <TableCell className="px-5 py-4 text-start">{item.kategori}</TableCell>
                 <TableCell className="px-5 py-4 text-start">{item.satuan}</TableCell>
-                <TableCell className="px-5 py-4 text-start">{item.harga}</TableCell>
+                {/* <TableCell className="px-5 py-4 text-start">{item.harga}</TableCell> */}
                 <TableCell className="px-5 py-4 text-start">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell className="px-5 py-4 text-start">
                   <Button

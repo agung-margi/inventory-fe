@@ -5,6 +5,7 @@ import Button from "../../ui/button/Button.tsx";
 import { createWarehouse } from "../../../services/warehouse.tsx";
 import Label from "../../form/Label.tsx";
 import Input from "../../form/input/InputField.tsx";
+import { toast } from "react-toastify";
 
 type Warehouse = {
   nama_wh: string;
@@ -19,7 +20,7 @@ export default function WarehouseForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!namaWh || !alamatWh) {
-      alert("Nama Warehouse dan Alamat harus diisi");
+      toast.error("Nama Warehouse dan Alamat harus diisi");
       return;
     }
 
@@ -28,7 +29,7 @@ export default function WarehouseForm() {
         nama_wh: namaWh,
         alamat: alamatWh,
       });
-      alert("Warehouse berhasil dibuat");
+      toast.success("Warehouse berhasil dibuat");
       navigate("/warehouse");
     } catch (error) {
       console.error("Error creating warehouse:", error);
@@ -36,7 +37,7 @@ export default function WarehouseForm() {
         error && typeof error === "object" && "message" in error
           ? (error as { message: string }).message
           : String(error);
-      alert("Gagal membuat warehouse: " + errorMessage);
+      toast.error("Gagal membuat warehouse: " + errorMessage);
       return;
     }
   };
