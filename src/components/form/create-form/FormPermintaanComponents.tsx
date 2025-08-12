@@ -9,6 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { getAllItem } from "../../../services/item.tsx";
 import { getAllWarehouse } from "../../../services/warehouse.tsx";
 import { createPermintaan } from "../../../services/permintaan.tsx";
+import { toast } from "react-toastify";
 
 type ItemFromAPI = {
   id: string;
@@ -95,7 +96,7 @@ export default function FormPermintaanComponents({
       (item) => item.productId === selectedProductId
     );
     if (alreadyExists) {
-      alert(`Produk "${product.designator}" sudah ditambahkan sebelumnya`);
+      toast.error("Item sudah ditambahkan sebelumnya");
       return;
     }
 
@@ -121,7 +122,7 @@ export default function FormPermintaanComponents({
     e.preventDefault();
 
     if (!tanggal || !selectedWarehouseId || !project || items.length === 0) {
-      alert(
+      toast.error(
         "Tanggal, Tujuan Warehouse, Project, dan minimal 1 item harus diisi"
       );
       return;
@@ -132,7 +133,7 @@ export default function FormPermintaanComponents({
       (wh) => wh.id === selectedWarehouseId
     );
     if (!selectedWarehouse) {
-      alert("Warehouse tidak valid");
+      toast.error("Warehouse tidak valid");
       return;
     }
 
@@ -153,9 +154,8 @@ export default function FormPermintaanComponents({
       items: mappedItems,
     };
     try {
-      console.log("Data yang akan dikirim:", dataToSend);
       await createPermintaan(dataToSend);
-      alert("Permintaan berhasil dibuat!");
+      toast.success("Permintaan berhasil dibuat!");
 
       // reset form
       setTanggal(null);

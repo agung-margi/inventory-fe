@@ -9,6 +9,7 @@ import {
   approvePermintaan,
   getPermintaanById,
 } from "../../../services/permintaan.tsx";
+import { toast } from "react-toastify";
 
 type ItemFromAPI = {
   id: string;
@@ -68,7 +69,7 @@ export default function ApprovePermintaanForm() {
       // contoh: redirect ke daftar permintaan
       navigate("/permintaan");
     } catch (error) {
-      alert("Gagal approve: " + (error as Error).message);
+      toast.error("Gagal approve: " + (error as Error).message);
     }
   };
 
