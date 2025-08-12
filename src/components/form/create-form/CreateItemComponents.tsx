@@ -13,10 +13,14 @@ export default function CreateItemComponents() {
   const [designator, setDsignator] = useState("");
   const [nama_item, setNama_item] = useState("");
   const [kategori, setKategori] = useState("");
+  const [satuan, setsatuan] = useState("");
+  const [created_at, setCreated_at] = useState("");
+  const [action, setAction] = useState("");
   const options = [
     { value: "clamp-hook", label: "CLAMP-HOOK" },
     { value: "ku", label: "Kabel Udara" },
     { value: "tiang", label: "Tiang" },
+    { value: "s-clamp", label: "S-Clamp" },
   ];
 
   
@@ -58,7 +62,19 @@ export default function CreateItemComponents() {
               className="dark:bg-dark-900"
             />
           </div>
-          
+          <div>
+  <Label htmlFor="satuan">Satuan</Label>
+  <select
+    id="satuan"
+    name="satuan"
+    className="border rounded p-2 w-full"
+    defaultValue=""
+  >
+    <option value="" disabled>Pilih satuan</option>
+    <option value="pcs">Pcs</option>
+    <option value="box">Meter</option>
+     </select>
+</div>
           <div className="flex justify-end mt-4 space-x-2">
             <Button type="submit" variant="success">
               Submit
