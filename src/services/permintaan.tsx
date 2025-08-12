@@ -16,6 +16,13 @@ export const fetchPermintaan = async (page = 1, limit = 20) => {
   return res.data.data;
 }
 
+
+export const getPermintaan = async () => {
+  const res = await axios.get('/api/v1/transaksi/permintaan', {
+  });
+
+  return res.data.data;
+}
 export const createPermintaan = async (data: {
   tanggal: string;
   tujuanWh: string;
