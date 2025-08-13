@@ -52,3 +52,11 @@ export const createWarehouse = async (data: {
     throw new Error(err.response?.data?.message || "Gagal membuat data warehouse");
   }
 };
+
+export const getWarehouse = async (kodeWh: string) => {
+  const res = await api.get('/', {
+    params: { kodeWh }
+  });
+
+  return res.data;
+};

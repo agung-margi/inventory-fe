@@ -17,8 +17,9 @@ export const fetchPermintaan = async (page = 1, limit = 20) => {
 }
 
 
-export const getPermintaan = async () => {
-  const res = await axios.get('/api/v1/transaksi/permintaan', {
+export const getPermintaan = async (tujuanWh: string) => {
+  const res = await api.get('/permintaan', {
+    params: { tujuanWh, status: "approved" }
   });
 
   return res.data.data;

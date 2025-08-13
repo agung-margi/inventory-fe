@@ -12,11 +12,28 @@ import {
 } from "../../../services/permintaan.tsx";
 // import Select from "../Select.tsx";
 import Select from "react-select";
+import { jwtDecode } from "jwt-decode";
+import { getMe } from "../../../services/auth.tsx";
+import {
+  getAllWarehouse,
+  getWarehouse,
+  getWarehouseById,
+} from "../../../services/warehouse.tsx";
 
 type Item = {
   productId: string;
   name: string;
   qty: number;
+  qtyDipenuhi: number;
+  qtyDiminta: number;
+};
+
+type TokenPayload = {
+  id: string;
+  role: string;
+  kode_wh: string;
+  iat: number;
+  exp: number;
 };
 
 export default function CreatePengeluaranComponents() {
@@ -24,14 +41,25 @@ export default function CreatePengeluaranComponents() {
   const [permintaanList, setPermintaanList] = useState<any[]>([]);
   const [selectedPermintaanId, setSelectedPermintaanId] = useState("");
   const [items, setItems] = useState<Item[]>([]);
-  const [isSearchable, setIsSearchable] = useState(true);
   const navigate = useNavigate();
+  const [namaWarehouse, setNamaWarehouse] = useState("");
+  const [warehouses, setWarehouses] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [selectedWarehouse, setSelectedWarehouse] = useState<{
+    value: string;
+    label: string;
+  } | null>(null);
 
   // Ambil list permintaan saat mount
   useEffect(() => {
     const loadPermintaan = async () => {
       try {
-        const data = await getPermintaan();
+        // Ambil kode_wh dari user (cookie HttpOnly lewat API)
+        const meResponse = await getMe();
+        const kodeWhUser = meResponse.data.kode_wh;
+
+        const data = await getPermintaan(kodeWhUser);
         console.log("Permintaan List:", data);
         setPermintaanList(data.data);
       } catch (err) {
@@ -47,15 +75,16 @@ export default function CreatePengeluaranComponents() {
 
     const loadDetail = async () => {
       try {
-        const detail = await getPermintaanById(selectedPermintaanId);
-        console.log("Detail Permintaan:", detail.data.permintaan);
-        // Mapping ke state items
-        const mappedItems = detail.data.detail.map((it: any) => ({
+        const response = await getPermintaanById(selectedPermintaanId);
+        console.log("Detail Permintaan:", response.data.detail);
+        const mappedItems = response.data.detail.map((it: any) => ({
           productId: it.designator,
-          name: it.name || it.designator, // fallback kalau name tidak ada
-          qty: it.qty,
+          name: it.name || it.designator,
+          qtyDiminta: it.qty, // dari API
+          // qtyDipenuhi: it.qty, // default sama, tapi bisa user ubah
         }));
 
+        console.log("Mapped Items:", mappedItems);
         setItems(mappedItems);
       } catch (err) {
         console.error("Gagal fetch detail permintaan:", err);
@@ -63,6 +92,39 @@ export default function CreatePengeluaranComponents() {
     };
     loadDetail();
   }, [selectedPermintaanId]);
+  useEffect(() => {
+    const loadWarehouse = async () => {
+      try {
+        // Ambil kode_wh dari user (cookie HttpOnly lewat API)
+        const meResponse = await getMe();
+        const kodeWhUser = meResponse.data.kode_wh;
+
+        // Ambil list warehouse
+        const listResponse = await getWarehouse(kodeWhUser);
+        console.log("List Warehouse:", listResponse);
+        const options = listResponse.data.map((wh: any) => ({
+          value: wh.kode_wh,
+          label: `${wh.kode_wh} - ${wh.nama_wh}`,
+        }));
+
+        setWarehouses(options);
+
+        // Set default sesuai kode_wh dari user
+        const defaultOption =
+          options.find((opt: any) => opt.value === kodeWhUser) || null;
+        setSelectedWarehouse(defaultOption);
+
+        // Kalau mau langsung setNamaWarehouse
+        if (defaultOption) {
+          setNamaWarehouse(defaultOption.label);
+        }
+      } catch (error) {
+        console.error("Gagal ambil warehouse:", error);
+      }
+    };
+
+    loadWarehouse();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,13 +145,14 @@ export default function CreatePengeluaranComponents() {
         </div>
 
         <div>
-          <Label htmlFor="name">Nama Warehouse</Label>
-          <Input
-            type="text"
-            id="name"
-            placeholder="Masukan Nama Warehouse"
-            value={nama}
-            onChange={(e) => setNama(e.target.value)}
+          <Label htmlFor="warehouse">Nama Warehouse</Label>
+          <Select
+            id="warehouse"
+            options={warehouses}
+            value={selectedWarehouse}
+            onChange={(option) => setSelectedWarehouse(option)}
+            placeholder="Pilih Warehouse..."
+            isSearchable
           />
         </div>
 
@@ -124,14 +187,52 @@ export default function CreatePengeluaranComponents() {
 
         {/* Tabel item dari permintaan */}
         {items.length > 0 && (
-          <ul className="space-y-2">
-            {items.map((item, i) => (
-              <li key={i} className="border p-2 rounded shadow">
-                <strong>{item.name}</strong> - Qty diminta: {item.qty}
-                {/* Bisa tambahkan input di sini kalau mau ubah qty */}
+          <div>
+            <ul className="mb-4 divide-y divide-gray-200 border border-gray-200 rounded-lg">
+              {/* Header */}
+              <li className="grid grid-cols-3 gap-4 p-2 bg-gray-100 font-semibold text-sm text-center">
+                <span>Designator</span>
+                <span>Qty Diminta</span>
+                <span>Qty Dipenuhi</span>
               </li>
-            ))}
-          </ul>
+
+              {/* Rows */}
+              {items.map((item, i) => (
+                <li
+                  key={i}
+                  className="grid grid-cols-3 gap-4 items-center p-2 text-sm text-center"
+                >
+                  {/* Designator / Nama Produk */}
+                  <span>{item.name}</span>
+
+                  {/* Qty Diminta (readonly) */}
+                  <input
+                    type="number"
+                    value={item.qtyDiminta}
+                    readOnly
+                    className="w-20 border rounded px-2 py-1 text-center mx-auto bg-gray-100"
+                  />
+
+                  {/* Qty Dipenuhi (editable) */}
+                  <input
+                    type="number"
+                    min={0}
+                    max={item.qtyDiminta}
+                    value={item.qtyDipenuhi || 0}
+                    onChange={(e) => {
+                      const newQty = parseInt(e.target.value) || 0;
+                      setItems((prev) =>
+                        prev.map((it, idx) =>
+                          idx === i ? { ...it, qtyDipenuhi: newQty } : it
+                        )
+                      );
+                    }}
+                    className="w-20 border rounded px-2 py-1 text-center mx-auto"
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
 
         <div className="flex justify-end mt-4 space-x-2">
