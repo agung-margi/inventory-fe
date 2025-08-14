@@ -19,29 +19,34 @@ import {
   getWarehouse,
   getWarehouseById,
 } from "../../../services/warehouse.tsx";
+import { createPengeluaran } from "../../../services/pengeluaran.tsx";
+import { toast } from "react-toastify";
 
 type Item = {
-  productId: string;
+  designator: string;
   name: string;
   qty: number;
   qtyDipenuhi: number;
   qtyDiminta: number;
 };
 
-type TokenPayload = {
-  id: string;
-  role: string;
-  kode_wh: string;
-  iat: number;
-  exp: number;
+type PengeluaranType = {
+  warehouseId: string;
+  penerimaId: string;
+  keterangan?: string;
+  permintaanId: string;
+  items: { designator: string; qty: number }[];
 };
 
 export default function CreatePengeluaranComponents() {
+  const navigate = useNavigate();
   const [nama, setNama] = useState("");
   const [permintaanList, setPermintaanList] = useState<any[]>([]);
   const [selectedPermintaanId, setSelectedPermintaanId] = useState("");
   const [items, setItems] = useState<Item[]>([]);
-  const navigate = useNavigate();
+  const [penerima, setPenerima] = useState("");
+  const [keterangan, setKeterangan] = useState("");
+
   const [namaWarehouse, setNamaWarehouse] = useState("");
   const [warehouses, setWarehouses] = useState<
     { value: string; label: string }[]
@@ -50,6 +55,16 @@ export default function CreatePengeluaranComponents() {
     value: string;
     label: string;
   } | null>(null);
+
+  const payload = {
+    warehouseId: selectedWarehouse?.value,
+    penerimaId: penerima, // isi dari input text penerima
+    permintaanId: selectedPermintaanId,
+    items: items.map((it) => ({
+      designator: it.designator,
+      qty: it.qtyDipenuhi || 0,
+    })),
+  };
 
   // Ambil list permintaan saat mount
   useEffect(() => {
@@ -76,7 +91,6 @@ export default function CreatePengeluaranComponents() {
     const loadDetail = async () => {
       try {
         const response = await getPermintaanById(selectedPermintaanId);
-        console.log("Detail Permintaan:", response.data.detail);
         const mappedItems = response.data.detail.map((it: any) => ({
           productId: it.designator,
           name: it.name || it.designator,
@@ -92,6 +106,7 @@ export default function CreatePengeluaranComponents() {
     };
     loadDetail();
   }, [selectedPermintaanId]);
+
   useEffect(() => {
     const loadWarehouse = async () => {
       try {
@@ -126,14 +141,42 @@ export default function CreatePengeluaranComponents() {
     loadWarehouse();
   }, []);
 
+  // ambil peminta
+  useEffect(() => {
+    if (!selectedPermintaanId) return;
+
+    const loadDetail = async () => {
+      try {
+        const response = await getPermintaanById(selectedPermintaanId);
+        const penerima = response.data.peminta.nama
+        setPenerima(penerima);
+      } catch (err) {
+        console.error("Gagal fetch detail permintaan:", err);
+      }
+    };
+    loadDetail();
+  }, [selectedPermintaanId]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({
-      namaWarehouse: nama,
-      permintaanId: selectedPermintaanId,
-      items,
-    });
-    // navigate("/Transaksi");
+    try {
+      const payload = {
+        warehouseId: selectedWarehouse?.value,
+        penerimaId: penerima,
+        keterangan: keterangan,
+        permintaanId: selectedPermintaanId,
+        items: items.map((it) => ({
+          designator: it.name,
+          qty: it.qtyDipenuhi || 0,
+        })),
+      };
+      await createPengeluaran(payload);
+      toast.success("Transaksi pengeluaran berhasil");
+      navigate("/Transaksi");
+    } catch (error) {
+      console.error("Gagal membuat pengeluaran:", error);
+      toast.error("Gagal membuat pengeluaran");
+    }
   };
 
   return (
@@ -163,6 +206,20 @@ export default function CreatePengeluaranComponents() {
             id="penerima"
             placeholder="Masukan nama penerima"
             className="w-full border px-3 py-2 rounded mb-4"
+            value={penerima}
+            onChange={(e) => setPenerima(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="keterangan">Keterangan</label>
+          <input
+            type="text"
+            id="keterangan"
+            placeholder="Masukan keterangan"
+            className="w-full border px-3 py-2 rounded mb-4"
+            value={keterangan}
+            onChange={(e) => setKeterangan(e.target.value)}
           />
         </div>
 

@@ -29,6 +29,7 @@ import PermintaanPage from "./pages/Transaksi/permintaan";
 import ViewWarehouse from "./components/tables/Warehouse/ViewWarehouse";
 import FormPermintaanComponents from "./components/form/create-form/FormPermintaanComponents";
 import ApprovePermintaanForm from "./components/form/create-form/ViewPermintaanComponents";
+import DisplayStokpage from "./pages/Item/DisplayStokPage";
 
 export default function App() {
   return (
@@ -69,6 +70,7 @@ export default function App() {
             {/* items */}
             <Route path="/items" element={<ItemPage />} />
             <Route path="/items/create" element={<CreateItemPage />} />
+            <Route path="/items/stock" element={<DisplayStokpage />} />
 
 
             {/* transaksi */}

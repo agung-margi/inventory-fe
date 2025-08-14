@@ -1,6 +1,5 @@
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import DefaultInputs from "../../components/form/form-elements/DefaultInputs";
-import InputGroup from "../../components/form/form-elements/InputGroup";
 import DropzoneComponent from "../../components/form/form-elements/DropZone";
 import CheckboxComponents from "../../components/form/form-elements/CheckboxComponents";
 import RadioButtons from "../../components/form/form-elements/RadioButtons";
@@ -27,7 +26,6 @@ export default function FormElements() {
           <InputStates />
         </div>
         <div className="space-y-6">
-          <InputGroup />
           <FileInputExample />
           <CheckboxComponents />
           <RadioButtons />

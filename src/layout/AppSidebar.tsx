@@ -58,7 +58,7 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "Create Item", path: "/items/create", pro: false },
       { name: "List Item", path: "/items", pro: false },
-    { name: "Display Stok", path: "/stock", pro: false }],
+    { name: "Display Stok", path: "/items/stock", pro: false }],
   },
   {
     name: "Transaksi",
