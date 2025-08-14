@@ -1,163 +1,125 @@
-import { useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from "../../ui/table";
-import Button from "../../ui/button/Button";
-import { EyeIcon } from "../../../icons";
-
-interface StockItem {
-  id: number;
-  code: string; // kode WH
-  warehouseName: string;
-  items: {
-    name: string;
-    stock: number;
-  }[];
-}
-
-const tableData: StockItem[] = [
-  {
-    id: 1,
-    code: "WH001",
-    warehouseName: "WH SUKARESMI",
-    items: [
-      { name: "Semen Portland", stock: 120 },
-      { name: "Besi Beton", stock: 80 },
-      { name: "Batu Bata", stock: 5000 },
-    ],
-  },
-  {
-    id: 2,
-    code: "WH002",
-    warehouseName: "WH CIKARANG",
-    items: [
-      { name: "Pipa PVC", stock: 300 },
-      { name: "Keramik Lantai", stock: 200 },
-    ],
-  },
-  {
-    id: 3,
-    code: "WH003",
-    warehouseName: "WH JAKARTA",
-    items: [
-      { name: "Cat Tembok", stock: 150 },
-      { name: "Kayu Lapis", stock: 90 },
-      { name: "Triplek", stock: 70 },
-    ],
-  },
-];
+import { useState, useEffect } from "react";
+import Label from "../../form/Label";
+import Select from "../../form/Select"; // Pastikan path sesuai
+import { getStock } from "../../../services/item";
+import { getMe } from "../../../services/auth";
+import { getWarehouse } from "../../../services/warehouse";
+import { toast } from "react-toastify";
 
 export default function DisplayStockComponents() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 2;
+  const [stokWarehouse, setStokWarehouse] = useState<any[]>([]);
+  const [namaWarehouse, setNamaWarehouse] = useState("");
+  const [warehouses, setWarehouses] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [selectedWarehouse, setSelectedWarehouse] = useState<string>("");
 
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
-  const paginatedData = tableData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const payload = {
+    warehouseId: selectedWarehouse,
+  };
+
+  useEffect(() => {
+    const loadWarehouse = async () => {
+      try {
+        // Ambil kode_wh dari user (cookie HttpOnly lewat API)
+        const meResponse = await getMe();
+        const kodeWhUser = meResponse.data.kode_wh;
+
+        // Ambil list warehouse
+        const listResponse = await getWarehouse(kodeWhUser);
+        const options = listResponse.data.map((wh: any) => ({
+          value: wh.kode_wh,
+          label: `${wh.kode_wh} - ${wh.nama_wh}`,
+        }));
+
+        setWarehouses(options);
+
+        // Set default sesuai kode_wh dari user
+        const defaultOption = options.find(
+          (opt: any) => opt.value === kodeWhUser
+        );
+        setSelectedWarehouse(defaultOption ? defaultOption.value : "");
+        setSelectedWarehouse(defaultOption);
+
+        // Kalau mau langsung setNamaWarehouse
+        if (defaultOption) {
+          setNamaWarehouse(defaultOption.label);
+        }
+      } catch (error:any) {
+       toast.error(error.response?.data?.message || "Gagal mengambil stok");
+      }
+    };
+
+    loadWarehouse();
+  }, []);
+
+  // Function ambil stok via service
+  const loadStokWarehouse = async (kodeWh: string) => {
+  try {
+    const res = await getStock(kodeWh); // service dipanggil
+
+    if (res.status) {
+      setStokWarehouse(res.data);
+    } else {
+      setStokWarehouse([]);
+      toast.error(res.message || "Stock tidak ditemukan"); // ⬅ notif error
+    }
+  } catch (err: any) {
+    setStokWarehouse([]);
+    toast.error(err.response?.data?.message || "Gagal mengambil stok");
+  }
+};
 
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-      <div className="max-w-full overflow-x-auto">
-        <Table>
-          <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-            <TableRow>
-              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 font-medium">
-                Kode WH
-              </TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 font-medium">
-                Nama WH
-              </TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 font-medium">
-                List Item
-              </TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 font-medium">
-                Stock
-              </TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start text-theme-xs text-gray-500 font-medium">
-                Action
-              </TableCell>
-            </TableRow>
-          </TableHeader>
+    <div>
+      {/* Dropdown pilih warehouse */}
+      <Label htmlFor="warehouse">Nama Warehouse</Label>
+      <Select
+        options={warehouses}
+        value={selectedWarehouse}
+        onChange={(val: string) => {
+          setSelectedWarehouse(val);
+          if (val) {
+            const kodeWh = val.split(" - ")[0]; // Ambil kode warehouse saja
+            loadStokWarehouse(kodeWh);
+          } else {
+            setStokWarehouse([]);
+          }
+        }}
+        placeholder="Pilih Warehouse..."
+      />
 
-          <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-            {paginatedData.map((wh) => (
-              <TableRow key={wh.id}>
-                {/* Kode WH */}
-                <TableCell className="px-5 py-4 font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                  {wh.code}
-                </TableCell>
-
-                {/* Nama WH */}
-                <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {wh.warehouseName}
-                </TableCell>
-
-                {/* List Item */}
-                <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  <ul className="list-disc pl-4">
-                    {wh.items.map((item, i) => (
-                      <li key={i}>{item.name}</li>
-                    ))}
-                  </ul>
-                </TableCell>
-
-                {/* Stock */}
-                <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  <ul className="list-none">
-                    {wh.items.map((item, i) => (
-                      <li key={i}>{item.stock}</li>
-                    ))}
-                  </ul>
-                </TableCell>
-
-                {/* Action */}
-                <TableCell className="px-4 py-3">
-                  <Button
-                    size="sm"
-                    variant="success"
-                    startIcon={<EyeIcon className="size-4" />}
-                  >
-                    Detail
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-
-      {/* Pagination */}
-      <div className="flex items-center justify-between p-4">
-        <span className="text-sm text-gray-500 dark:text-gray-400">
-          Page {currentPage} of {totalPages}
-        </span>
-        <div className="space-x-2">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            Prev
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </Button>
+      {/* Display stok warehouse */}
+      {stokWarehouse.length > 0 && (
+        <div className="mt-4 border rounded-lg overflow-hidden">
+          <table className="w-full border-collapse">
+            <thead className="bg-gray-100 text-sm">
+              <tr>
+                <th className="border px-3 py-2 text-left">Designator</th>
+                <th className="border px-3 py-2 text-center">Satuan</th>
+                <th className="border px-3 py-2 text-center">Available</th>
+                <th className="border px-3 py-2 text-center">Transit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stokWarehouse.map((stok) => (
+                <tr key={stok.id} className="text-sm">
+                  <td className="border px-3 py-1">{stok.designator}</td>
+                  <td className="border px-3 py-1 text-center">
+                    {stok.satuan}
+                  </td>
+                  <td className="border px-3 py-1 text-center">
+                    {stok.available}
+                  </td>
+                  <td className="border px-3 py-1 text-center">
+                    {stok.transit}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </div>
+      )}
     </div>
   );
 }

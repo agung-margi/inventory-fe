@@ -95,7 +95,6 @@ export default function CreatePengeluaranComponents() {
           productId: it.designator,
           name: it.name || it.designator,
           qtyDiminta: it.qty, // dari API
-          // qtyDipenuhi: it.qty, // default sama, tapi bisa user ubah
         }));
 
         console.log("Mapped Items:", mappedItems);

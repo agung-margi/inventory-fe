@@ -27,3 +27,10 @@ export const getMe = async () => {
   const res = await api.get("/auth/me");
   return res.data; // { id, email, role, ... }
 };
+
+export const getStock = async(kodeWh:string) => {
+  const res = await api.get('/stock', {
+    params: { kodeWh: kodeWh }
+  });
+  return res.data;
+}
