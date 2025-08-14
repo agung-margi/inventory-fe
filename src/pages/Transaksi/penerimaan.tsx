@@ -1,17 +1,18 @@
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
+import CreatePenerimaanComponents from "../../components/form/create-form/CreatePenerimaan";
 
-export default function CreatePengeluaranAGPage() {
+export default function CreatePenerimaanPage() {
   return (
     <div>
       <PageMeta
-        title="React.js Form Elements Dashboard | TailAdmin - React.js Admin Dashboard Template"
-        description="This is React.js Form Elements  Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        title="Admin | Create Penerimaan"
+        description="This is the Create Pengeluaran page for Admin"
       />
       <PageBreadcrumb pageTitle="Transaksi" />
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <div className="space-y-6">
-          <CreatePengeluaranAGComponents />
+          <CreatePenerimaanComponents/>
         </div>
       </div>
     </div>

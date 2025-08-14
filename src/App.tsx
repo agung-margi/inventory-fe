@@ -30,6 +30,7 @@ import ViewWarehouse from "./components/tables/Warehouse/ViewWarehouse";
 import FormPermintaanComponents from "./components/form/create-form/FormPermintaanComponents";
 import ApprovePermintaanForm from "./components/form/create-form/ViewPermintaanComponents";
 import DisplayStokpage from "./pages/Item/DisplayStokPage";
+import CreatePenerimaanPage from "./pages/Transaksi/penerimaan";
 
 export default function App() {
   return (
@@ -77,6 +78,7 @@ export default function App() {
             <Route path="/pengeluaran" element={<CreatePengeluaranPage />} />
             <Route path="/pengeluaranAG" element={<CreatePengeluaranAGPage />} />
             <Route path="/permintaan" element={<PermintaanPage />} />
+            <Route path="/penerimaan" element={<CreatePenerimaanPage/>} />
 
             <Route path="/permintaan/create" element={<FormPermintaanComponents />} />
             <Route path="/permintaan/view/:id" element={<ApprovePermintaanForm/>} />
