@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import ComponentCard from "../../common/ComponentCard.tsx";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { getMe } from "../../../services/auth";
@@ -102,6 +103,7 @@ export default function CreatePenerimaanComponents() {
   };
 
   return (
+     <ComponentCard title="Penerimaan">
     <form onSubmit={handleSubmit} className="space-y-6 p-4 border rounded-lg">
       <div>
         <Label>Warehouse</Label>
@@ -110,17 +112,6 @@ export default function CreatePenerimaanComponents() {
           value={selectedWarehouse}
           onChange={(opt) => setSelectedWarehouse(opt)}
           placeholder="Pilih Warehouse..."
-        />
-      </div>
-
-      <div>
-        <Label>Sumber</Label>
-        <input
-          type="text"
-          value={sumber}
-          onChange={(e) => setSumber(e.target.value)}
-          className="w-full border px-3 py-2 rounded"
-          placeholder="Masukkan sumber barang"
         />
       </div>
 
@@ -135,6 +126,17 @@ export default function CreatePenerimaanComponents() {
           <option value="vendor">Vendor</option>
           <option value="internal">Internal</option>
         </select>
+      </div>
+
+ <div>
+        <Label>Pengirim</Label>
+        <input
+          type="text"
+          value={sumber}
+          onChange={(e) => setSumber(e.target.value)}
+          className="w-full border px-3 py-2 rounded"
+          placeholder="Masukkan pengirim barang"
+        />
       </div>
 
       <div>
@@ -184,5 +186,6 @@ export default function CreatePenerimaanComponents() {
         </Button>
       </div>
     </form>
+    </ComponentCard>
   );
 }

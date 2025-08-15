@@ -26,7 +26,11 @@ type NavItem = {
   icon: React.ReactNode;
   path?: string;
   roles?: string[]; // Optional roles for access control
-  subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
+  subItems?: { name: string; 
+    path: string; 
+    pro?: boolean; 
+    new?: boolean;
+   roles?: string }[];
 };
 
 const navItems: NavItem[] = [
@@ -41,16 +45,16 @@ const navItems: NavItem[] = [
     name: "User",
     // roles: ["admin"],
     subItems: [
-      { name: "Create User", path: "/users/create", pro: false },
-    { name: "List User", path: "/users", pro: false }],
+      { name: "Create User", path: "/users/create", pro: false, roles:"admin" },
+    { name: "List User", path: "/users", pro: false, roles:"admin" }],
   },
   {
     icon: <FolderIcon />,
     name: "Warehosue",
     // roles: ["admin", "manager"],
     subItems: [
-      { name: "Create Warehouse", path: "/warehouse/create", pro: false },
-    { name: "List Warehouse", path: "/warehouse", pro: false }],
+      { name: "Create Warehouse", path: "/warehouse/create", pro: false, roles:"admin" },
+    { name: "List Warehouse", path: "/warehouse", pro: false, roles:"admin" }],
   },
   {
     name: "Item",
@@ -64,16 +68,11 @@ const navItems: NavItem[] = [
     name: "Transaksi",
     icon: <PageIcon />,
     subItems: [
-      { name: "Permintaan", path: "/permintaan", pro: false },
+      { name: "Permintaan", path: "/permintaan", pro: false, roles:"manager" },
       { name: "Penerimaan", path: "/penerimaan", pro: false },
       { name: "Pengeluaran", path: "/pengeluaran", pro: false },
       { name: "TAG", path: "/tag", pro: false },
     ],
-  },
-  {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
   },
 ];
 
