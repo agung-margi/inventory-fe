@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ComponentCard from "../../common/ComponentCard.tsx";
 import { EyeCloseIcon, EyeIcon } from "../../../icons/index.ts";
 import { register } from "../../../services/auth.tsx";
@@ -8,6 +8,7 @@ import Label from "../../form/Label.tsx";
 import Input from "../../form/input/InputField.tsx";
 import Select from "../../form/Select.tsx";
 import { toast } from "react-toastify";
+import { getAllWarehouse } from "../../../services/warehouse.tsx";
 
 type CreateUserFormData = {
   nama: string;
@@ -16,6 +17,13 @@ type CreateUserFormData = {
   confirmPassword: string;
   phone: string;
   role: string;
+  kodeWh: string;
+};
+
+type Warehouse = {
+  id: string;
+  kode_wh: string;
+  nama_wh: string;
 };
 
 export default function CreateUserComponents({
@@ -30,7 +38,17 @@ export default function CreateUserComponents({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
-  const [warehouse, setWarehouse] = useState("");
+  const [kodeWh, setKodeWh] = useState("");
+  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState("");
+
+  useEffect(() => {
+    async function fetchWarehouses() {
+      const response = await getAllWarehouse(); // pastikan fungsi ini ada di services
+      setWarehouses(response.data);
+    }
+    fetchWarehouses();
+  }, []);
   const navigate = useNavigate();
 
   const roles = [
@@ -58,7 +76,16 @@ export default function CreateUserComponents({
 
     try {
       // Kamu bisa kirim data lengkap ke API register
-      await register(nama, email, phone, password, confirmPassword, role);
+      await register(
+        nama,
+        email,
+        phone,
+        password,
+        confirmPassword,
+        role,
+        kodeWh
+      );
+
       toast.success("Registrasi berhasil");
       navigate("/users");
     } catch (error: any) {
@@ -73,6 +100,7 @@ export default function CreateUserComponents({
     setConfirmPassword("");
     setPhone("");
     setRole("");
+    setKodeWh("");
   };
 
   return (
@@ -123,14 +151,20 @@ export default function CreateUserComponents({
             />
           </div>
           <div>
-            <Label htmlFor="kodeWH">Nama Lengkap</Label>
-            <Input
-              type="text"
-              id="name"
-              placeholder="John Doe"
-              value={nama}
-              onChange={(e) => setNama(e.target.value)}
-            />
+            <Label htmlFor="kodeWh">Lokasi Kerja</Label>
+            <select
+              id="kodeWh"
+              value={kodeWh}
+              onChange={(e) => setKodeWh(e.target.value)}
+              className="w-full border px-3 py-2 rounded dark:text-white"
+            >
+              <option value="">-- Pilih Warehouse --</option>
+              {warehouses.map((wh) => (
+                <option key={wh.id} value={wh.kode_wh}>
+                  {wh.kode_wh} - {wh.nama_wh}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <Label>Password</Label>
