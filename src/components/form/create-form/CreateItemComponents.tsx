@@ -16,10 +16,10 @@ export default function CreateItemComponents() {
   const [kategori, setKategori] = useState("");
   const [satuan, setSatuan] = useState("");
   const options = [
-    { value: "clamp-hook", label: "CLAMP-HOOK" },
-    { value: "ku", label: "Kabel Udara" },
-    { value: "tiang", label: "Tiang" },
-    { value: "s-clamp", label: "S-Clamp" },
+    { value: "clamp", label: "Clamp" },
+    { value: "KU", label: "Kabel Udara" },
+    { value: "Roset", label: "Roset" },
+    { value: "conector", label: "Conector" },
   ];
 
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ export default function CreateItemComponents() {
         satuan,
       });
       toast.success("Registrasi Item berhasil");
-      navigate("/users");
+      navigate("/items");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Terjadi kesalahan");
     }
@@ -93,7 +93,7 @@ export default function CreateItemComponents() {
                 Pilih satuan
               </option>
               <option value="pcs">Pcs</option>
-              <option value="box">Meter</option>
+              <option value="meter">Meter</option>
             </select>
           </div>
           <div className="flex justify-end mt-4 space-x-2">

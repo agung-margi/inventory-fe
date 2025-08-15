@@ -30,6 +30,7 @@ export default function CreateUserComponents({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
+  const [warehouse, setWarehouse] = useState("");
   const navigate = useNavigate();
 
   const roles = [
