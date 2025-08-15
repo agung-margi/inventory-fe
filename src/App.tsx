@@ -76,7 +76,7 @@ export default function App() {
 
             {/* transaksi */}
             <Route path="/pengeluaran" element={<CreatePengeluaranPage />} />
-            <Route path="/pengeluaranAG" element={<CreatePengeluaranAGPage />} />
+            <Route path="/tag" element={<CreatePengeluaranAGPage />} />
             <Route path="/permintaan" element={<PermintaanPage />} />
             <Route path="/penerimaan" element={<CreatePenerimaanPage/>} />
 

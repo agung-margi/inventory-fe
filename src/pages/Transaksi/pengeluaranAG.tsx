@@ -1,5 +1,6 @@
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
+import CreateTAGForm from "../../components/form/create-form/CreatePengeluaranAG";
 
 export default function CreatePengeluaranAGPage() {
   return (
@@ -9,9 +10,9 @@ export default function CreatePengeluaranAGPage() {
         description="This is React.js Form Elements  Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
       />
       <PageBreadcrumb pageTitle="Transaksi" />
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-1">
         <div className="space-y-6">
-          <CreatePengeluaranAGComponents />
+          <CreateTAGForm />
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ import { createPenerimaan } from "../../../services/penerimaan";
 import Label from "../Label";
 import Button from "../../ui/button/Button";
 import { getAllItem } from "../../../services/item";
+import ComponentCard from "../../common/ComponentCard";
 
 export default function CreateTAGForm() {
   const [warehouses, setWarehouses] = useState<{ value: string; label: string }[]>([]);
@@ -102,9 +103,20 @@ export default function CreateTAGForm() {
   };
 
   return (
+     <ComponentCard title="Create Transaksi Antar Gudang">
     <form onSubmit={handleSubmit} className="space-y-6 p-4 border rounded-lg">
       <div>
-        <Label>Warehouse</Label>
+        <Label>Warehouse Pengirim</Label>
+        <Select
+          options={warehouses}
+          value={selectedWarehouse}
+          onChange={(opt) => setSelectedWarehouse(opt)}
+          placeholder="Pilih Warehouse..."
+        />
+      </div>
+
+      <div>
+        <Label>Warehouse Penerima</Label>
         <Select
           options={warehouses}
           value={selectedWarehouse}
@@ -167,7 +179,7 @@ export default function CreateTAGForm() {
                 <Button type="button" variant="danger" onClick={() => handleRemoveItem(index)}>
                   Hapus
                 </Button>
-              )}
+              )}  
               {index === items.length - 1 && (
                 <Button type="button" variant="primary" onClick={handleAddItem}>
                   +
@@ -184,5 +196,6 @@ export default function CreateTAGForm() {
         </Button>
       </div>
     </form>
+    </ComponentCard>
   );
 }

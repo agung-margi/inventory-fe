@@ -67,8 +67,7 @@ const navItems: NavItem[] = [
       { name: "Permintaan", path: "/permintaan", pro: false },
       { name: "Penerimaan", path: "/penerimaan", pro: false },
       { name: "Pengeluaran", path: "/pengeluaran", pro: false },
-      { name: "Pengeluaran AG", path: "/pengeluaranAG", pro: false },
-      { name: "Penerimaan AG", path: "/penerimaan AG", pro: false },
+      { name: "TAG", path: "/tag", pro: false },
     ],
   },
   {
