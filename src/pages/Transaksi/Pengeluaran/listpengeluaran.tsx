@@ -29,6 +29,7 @@ export default function ListPengeluaranPage() {
             <ComponentCard title="List Pengeluaran">
               <PengeluaranListComponents />
             </ComponentCard>
+            
         </div>
       </div>
     </div>

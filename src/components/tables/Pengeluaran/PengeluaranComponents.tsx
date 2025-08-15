@@ -14,8 +14,10 @@ import { getMe } from "../../../services/auth";
 
 interface Pengeluaran {
   id: string;
+  pengeluaranId: string; // ID unik untuk pengeluaran
   warehouseId: string;
-  penerimaId: string;
+  petugasNama: string;
+  penerimaNama: string
   status: string;
   project: string;
   catatan: string;
@@ -106,7 +108,10 @@ export default function PengeluaranListComponents() {
                 Warehouse
               </TableCell>
               <TableCell isHeader className="text-center px-5 py-3 text-theme-sm text-gray-500 dark:text-gray-400 font-medium">
-                Project
+                Penerima
+              </TableCell>
+              <TableCell isHeader className="text-center px-5 py-3 text-theme-sm text-gray-500 dark:text-gray-400 font-medium">
+                CreatedBy
               </TableCell>
               <TableCell isHeader className="text-center px-5 py-3 text-theme-sm text-gray-500 dark:text-gray-400 font-medium">
                 Status
@@ -120,7 +125,7 @@ export default function PengeluaranListComponents() {
             {pengeluaranList.map((pengeluaran) => (
               <TableRow key={pengeluaran.id}>
                 <TableCell className="px-5 py-4 text-center dark:text-white">
-                  {pengeluaran.id}
+                  {pengeluaran.pengeluaranId}
                 </TableCell>
                 <TableCell className="px-5 py-4 text-center dark:text-white">
                   {new Date(pengeluaran.tanggal).toLocaleDateString()}
@@ -129,7 +134,10 @@ export default function PengeluaranListComponents() {
                   {pengeluaran.warehouseId}
                 </TableCell>
                 <TableCell className="px-5 py-4 text-center dark:text-white">
-                  {pengeluaran.project}
+                  {pengeluaran.penerimaNama}
+                </TableCell>
+                <TableCell className="px-5 py-4 text-center dark:text-white">
+                  {pengeluaran.petugasNama}
                 </TableCell>
                 <TableCell className="px-5 py-4 text-center dark:text-white">
                   {pengeluaran.status}

@@ -36,6 +36,7 @@ import DisplayStokpage from "./pages/Item/DisplayStokPage";
 import CreatePenerimaanPage from "./pages/Transaksi/penerimaan";
 import ListPengeluaranPage from "./pages/Transaksi/Pengeluaran/listpengeluaran";
 import { AuthProvider } from "./context/AuthContext";
+import ViewPengeluaranComponents from "./pages/Transaksi/Pengeluaran/viewPengeluaran";
 
 export default function App() {
   return (
@@ -80,6 +81,8 @@ export default function App() {
             {/* transaksi */}
             <Route path="/pengeluaran" element={<ListPengeluaranPage />} />
             <Route path="/pengeluaran/create" element={<CreatePengeluaranPage />} />
+
+            <Route path="/pengeluaran/view/:id" element={<ViewPengeluaranComponents />} />
             <Route path="/tag" element={<CreatePengeluaranAGPage />} />
             <Route path="/permintaan" element={<PermintaanPage />} />
             <Route path="/penerimaan" element={<CreatePenerimaanPage />} />

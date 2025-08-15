@@ -18,3 +18,7 @@ export const getPengeluaran = async (page = 1, limit = 20, kodeWh: string) => {
     params: { page, limit, kodeWh }
   });
 };
+
+export const getPengeluaranById = async (id: string) => {
+  return api.get(`/pengeluaran/${id}`);
+};

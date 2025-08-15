@@ -6,9 +6,10 @@ interface LabelProps {
   htmlFor?: string;
   children: ReactNode;
   className?: string;
+  value?: string;
 }
 
-const Label: FC<LabelProps> = ({ htmlFor, children, className }) => {
+const Label: FC<LabelProps> = ({ htmlFor, children, className, value }) => {
   return (
     <label
       htmlFor={htmlFor}
