@@ -122,7 +122,16 @@ export default function CreateUserComponents({
               className="dark:bg-dark-900"
             />
           </div>
-
+          <div>
+            <Label htmlFor="kodeWH">Nama Lengkap</Label>
+            <Input
+              type="text"
+              id="name"
+              placeholder="John Doe"
+              value={nama}
+              onChange={(e) => setNama(e.target.value)}
+            />
+          </div>
           <div>
             <Label>Password</Label>
             <div className="relative">

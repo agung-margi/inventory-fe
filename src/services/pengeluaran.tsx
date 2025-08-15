@@ -12,3 +12,9 @@ const api = axios.create({
 export const createPengeluaran = async (payload: any) => {
   return api.post("/pengeluaran", payload);
 };
+
+export const getPengeluaran = async (page = 1, limit = 20, kodeWh: string) => {
+  return api.get('/pengeluaran', {
+    params: { page, limit, kodeWh }
+  });
+};

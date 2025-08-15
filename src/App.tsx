@@ -1,5 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router";
-import { ToastContainer } from 'react-toastify';
+// App.tsx
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { ScrollToTop } from "./components/common/ScrollToTop";
+import AppLayout from "./layout/AppLayout"; // ini import context-mu
+
+// import semua pages
 import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
@@ -14,8 +19,6 @@ import Calendar from "./pages/Calendar";
 import BasicTables from "./pages/User/UserPage";
 import FormElements from "./pages/Forms/FormElements";
 import Blank from "./pages/Blank";
-import AppLayout from "./layout/AppLayout";
-import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import WarehousePage from "./pages/Warehouse/WarehousePage";
 import ItemPage from "./pages/Item/ItemPage";
@@ -31,20 +34,21 @@ import FormPermintaanComponents from "./components/form/create-form/FormPerminta
 import ApprovePermintaanForm from "./components/form/create-form/ViewPermintaanComponents";
 import DisplayStokpage from "./pages/Item/DisplayStokPage";
 import CreatePenerimaanPage from "./pages/Transaksi/penerimaan";
+import ListPengeluaranPage from "./pages/Transaksi/Pengeluaran/listpengeluaran";
+import { AuthProvider } from "./context/AuthContext";
 
 export default function App() {
   return (
-    <>
+      <AuthProvider>
         <ScrollToTop />
-         <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        newestOnTop
-        style={{ zIndex: 999999 }}
-      />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          newestOnTop
+          style={{ zIndex: 999999 }}
+        />
         <Routes>
           {/* Dashboard Layout */}
-          
           <Route element={<AppLayout />}>
             <Route index path="/" element={<Home />} />
 
@@ -73,15 +77,16 @@ export default function App() {
             <Route path="/items/create" element={<CreateItemPage />} />
             <Route path="/items/stock" element={<DisplayStokpage />} />
 
-
             {/* transaksi */}
-            <Route path="/pengeluaran" element={<CreatePengeluaranPage />} />
+            <Route path="/pengeluaran" element={<ListPengeluaranPage />} />
+            <Route path="/pengeluaran/create" element={<CreatePengeluaranPage />} />
             <Route path="/tag" element={<CreatePengeluaranAGPage />} />
             <Route path="/permintaan" element={<PermintaanPage />} />
-            <Route path="/penerimaan" element={<CreatePenerimaanPage/>} />
+            <Route path="/penerimaan" element={<CreatePenerimaanPage />} />
 
             <Route path="/permintaan/create" element={<FormPermintaanComponents />} />
-            <Route path="/permintaan/view/:id" element={<ApprovePermintaanForm/>} />
+            <Route path="/permintaan/view/:id" element={<ApprovePermintaanForm />} />
+
             {/* Ui Elements */}
             <Route path="/alerts" element={<Alerts />} />
             <Route path="/avatars" element={<Avatars />} />
@@ -89,7 +94,6 @@ export default function App() {
             <Route path="/buttons" element={<Buttons />} />
             <Route path="/images" element={<Images />} />
             <Route path="/videos" element={<Videos />} />
-
           </Route>
 
           {/* Auth Layout */}
@@ -99,7 +103,6 @@ export default function App() {
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-        
-    </>
+      </AuthProvider>
   );
 }
