@@ -53,6 +53,7 @@ const navItems: NavItem[] = [
   {
     name: "Item",
     icon: <BoxIcon />,
+    role: ["admin"],
     subItems: [
       { name: "Create Item", path: "/items/create" },
       { name: "List Item", path: "/items" },
@@ -63,12 +64,19 @@ const navItems: NavItem[] = [
     name: "Transaksi",
     icon: <PageIcon />,
     subItems: [
-      { name: "Permintaan", path: "/permintaan", role: ["manager"] },
-      { name: "Penerimaan", path: "/penerimaan" },
-      { name: "Pengeluaran", path: "/pengeluaran" },
-      { name: "TAG", path: "/tag" },
+      { name: "Permintaan", path: "/permintaan", role: ["manager","admin"] },
+      { name: "Penerimaan", path: "/penerimaan", role: ["admin"] },
+      { name: "Pengeluaran", path: "/pengeluaran", role: ["admin"] },
+      { name: "TAG", path: "/tag", role: ["admin"] },
     ],
   },
+  {
+    name : "project",
+    icon: <FolderIcon />,
+    subItems: [
+      { name : "Form Project", path: "/projects/form-project", role: ["admin"] },
+    ],
+  }
 ];
 
 const AppSidebar: React.FC = () => {

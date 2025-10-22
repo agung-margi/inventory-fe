@@ -2,10 +2,7 @@ import { useState } from "react";
 import ComponentCard from "../../common/ComponentCard.tsx";
 import Label from "../Label.tsx";
 import Input from "../input/InputField.tsx";
-import Select from "../Select.tsx";
-import { EyeCloseIcon, EyeIcon, TimeIcon } from "../../../icons/index.ts";
 import DatePicker from "../date-picker.tsx";
-import { register } from "../../../services/auth.tsx";
 import { useNavigate } from "react-router";
 import Button from "../../ui/button/Button.tsx";
 const products = [
@@ -57,7 +54,7 @@ export default function CreatePermintaanComponents() {
     
 
     // await register(nama, alamat);
-    // navigate("/Transaksi");
+    navigate("/Transaksi");
     console.log(nama, items, qty)
   };
 

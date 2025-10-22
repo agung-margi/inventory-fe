@@ -1,5 +1,5 @@
 // App.tsx
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import AppLayout from "./layout/AppLayout"; // ini import context-mu
@@ -37,6 +37,7 @@ import CreatePenerimaanPage from "./pages/Transaksi/penerimaan";
 import ListPengeluaranPage from "./pages/Transaksi/Pengeluaran/listpengeluaran";
 import { AuthProvider } from "./context/AuthContext";
 import ViewPengeluaranComponents from "./pages/Transaksi/Pengeluaran/viewPengeluaran";
+import { CreateFormProjectComponents } from "./components/form/create-form/CreateFormProjectComponents";
 
 export default function App() {
   return (
@@ -105,6 +106,10 @@ export default function App() {
 
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />
+          {/* Project Route */}
+          <Route path="/projects/*" element={<AppLayout />}>
+            <Route index path="form-project" element={< CreateFormProjectComponents />} />
+          </Route>
         </Routes>
       </AuthProvider>
   );
